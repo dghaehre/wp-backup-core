@@ -13,7 +13,7 @@ const connect = ({host, username, password, port}) => new Promise((resolve, reje
 
 const downloadFile = (conn) => new Promise((resolve, reject) => {
   console.log("Downloading files")
-  conn.exec('curl -L https://raw.githubusercontent.com/dghaehre/wp-backup-core/master/backup.sh > backup.sh', handleStream(resolve, reject, conn))
+  conn.exec('curl -L https://raw.githubusercontent.com/dghaehre/wp-backup-core/master/backup.sh?token=ADXO5P7Y6T6WH2DAUGFLTPS53BDLW > backup.sh', handleStream(resolve, reject, conn))
 })
 
 const handleStream = (resolve, reject, conn) => (err, stream) => {
