@@ -61,7 +61,7 @@ const runBackup = (conn) => new Promise((resolve, reject) => {
         resolve(conn)
       }
     }).on('data', function(data) {
-      console.log("" + data);
+      //console.log("" + data);
     })
   })
 })
@@ -72,20 +72,16 @@ const createCrontab = (conn) => new Promise((resolve, reject) => {
   conn.exec(createCron(), handleStream(resolve, reject, conn))
 })
 
-const sanitize = (data) => new Promise((resolve, reject) => {
+const sanitize = (data) => {
   // Reject if data doesnt look good
   console.log(data)
-  resolve(data)
-})
+  return data
+}
 
 const main = (data) => new Promise((resolve, reject) => {
-  let sanitized = {}
-  sanitize(data)
-  .then(d => {
-    sanitzed = d
-    return d
-  })
-  .then(connect)
+  let sanitized = sanitize(data)
+
+  connect(sanitized)
   .then(downloadFile)
   .then(setPermission)
   .then(setWpInfo(sanitized))
