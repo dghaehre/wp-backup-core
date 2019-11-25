@@ -7,11 +7,23 @@ wp-backup-core usage:
 `yarn add wp-backup-core`
 
 ```js
-import { backup } from 'wp-backup-core'
+import { backup, restore } from 'wp-backup-core'
 
 backup({
  key: "your AWS key",
  secret: "your AWS secret",
+ bucketname: "Name of AWS S3 bucket",
+ host: "host ip or domain",
+ username: "username of host",
+ password: "password of host",
+ port: "port for ssh login",
+ name: "Name of project (used when saved to S3"),
+ path: "/path/to/wordpress"
+})
+.then(() => console.log("success"))
+.catch(console.log)
+
+restore({
  bucketname: "Name of AWS S3 bucket",
  host: "host ip or domain",
  username: "username of host",

@@ -16,6 +16,11 @@ const downloadFile = (conn) => new Promise((resolve, reject) => {
   conn.exec('curl -L https://raw.githubusercontent.com/dghaehre/wp-backup-core/master/backup.sh > backup.sh', handleStream(resolve, reject, conn))
 })
 
+const downloadRestoreFile = (conn) => new Promise((resolve, reject) => {
+  console.log("Downloading files")
+  conn.exec('curl -L https://raw.githubusercontent.com/dghaehre/wp-backup-core/master/restore.sh > restore.sh', handleStream(resolve, reject, conn))
+})
+
 const handleStream = (resolve, reject, conn) => (err, stream) => {
   if(err) reject(err)
   stream.on('close', function(code, signal) {
@@ -29,12 +34,14 @@ const handleStream = (resolve, reject, conn) => (err, stream) => {
   })
 }
 
-const setPermission = (conn) => new Promise((resolve, reject) => {
+const setPermission = filename => (conn) => new Promise((resolve, reject) => {
   console.log("Setting permissions")
-  conn.exec('chmod ug+x backup.sh', handleStream(resolve, reject, conn))
+  conn.exec(`chmod ug+x ${filename}`, handleStream(resolve, reject, conn))
 })
 
 const sedWp = ({ path, name, bucketname }) => `sed -i 's|NAME=\"examplename\"|NAME=\"${name}\"|g' ./backup.sh; sed -i 's|/path/to/wordpress|${path}|g' ./backup.sh; sed -i 's|bucketname|${bucketname}|g' ./backup.sh`
+
+const sedRestore = ({ path, name, filename, bucketname }) => `sed -i 's|/path/to/wp|${path}|g' ./restore.sh; sed -i 's|2019-11-21-12-16.tar.gz|${filename}|g' ./restore.sh; sed -i 's|projectname|${name}|g' ./restore.sh; sed -i 's|bucketname|${bucketname}|g' ./restore.sh`
 
 const createFiles = (key, secret) => `mkdir -p ~/.aws; echo "[default]" > ~/.aws/config; echo "[default]
 aws_access_key_id = ${key}
@@ -47,12 +54,16 @@ const setWpInfo = (data) => conn => new Promise((resolve, reject) => {
   conn.exec(sedWp(data), handleStream(resolve, reject, conn))
 })
 
+const setRestoreInfo = data => conn => new Promise((resolve, reject) => {
+  conn.exec(sedRestore(data), handleStream(resolve, reject, conn))
+})
+
 const createAwsCredentials = ({ key, secret }) => conn => new Promise((resolve, reject) => {
   conn.exec(createFiles(key, secret), handleStream(resolve, reject, conn))
 })
 
-const runBackup = (conn) => new Promise((resolve, reject) => {
-  conn.exec("~/backup.sh", (err, stream) => { 
+const run = filename => (conn) => new Promise((resolve, reject) => {
+  conn.exec(`~/${filename}`, (err, stream) => { 
     if(err) reject(err)
     stream.on('close', function(code, signal) {
       if(code) {
@@ -78,15 +89,15 @@ const sanitize = (data) => {
   return data
 }
 
-const main = (data) => new Promise((resolve, reject) => {
+const backup = (data) => new Promise((resolve, reject) => {
   let sanitized = sanitize(data)
 
   connect(sanitized)
   .then(downloadFile)
-  .then(setPermission)
+  .then(setPermission("backup.sh"))
   .then(setWpInfo(sanitized))
   .then(createAwsCredentials(sanitized))
-  .then(runBackup)
+  .then(run("backup.sh"))
   .then(createCrontab)
   .then(conn => {
     conn.end()
@@ -96,4 +107,26 @@ const main = (data) => new Promise((resolve, reject) => {
   .catch(reject)
 })
 
-exports.backup = main
+/**
+ * path
+ * name
+ * bucketname
+ * filename
+ */
+const restore = (data) => new Promise((resolve, reject) => {
+
+  connect(data)
+  .then(downloadRestoreFile)
+  .then(setPermission("restore.sh"))
+  .then(setRestoreInfo(data))
+  .then(run("restore.sh"))
+  .then(conn => {
+    conn.end()
+    console.log("Finished")
+    resolve()
+  })
+  .catch(reject)
+})
+
+exports.backup = backup
+exports.restore = restore
