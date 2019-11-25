@@ -88,7 +88,7 @@ const main = (data) => new Promise((resolve, reject) => {
   .then(connect)
   .then(downloadFile)
   .then(setPermission)
-  .then(setWpInfo(sainitized))
+  .then(setWpInfo(sanitized))
   .then(createAwsCredentials(sanitized))
   .then(runBackup)
   .then(createCrontab)

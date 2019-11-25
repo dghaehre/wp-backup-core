@@ -16,7 +16,9 @@ backup({
  host: "host ip or domain",
  username: "username of host",
  password: "password of host",
- port: "port for ssh login"
+ port: "port for ssh login",
+ name: "Name of project (used when saved to S3"),
+ path: "/path/to/wordpress"
 })
 .then(() => console.log("success"))
 .catch(console.log)
