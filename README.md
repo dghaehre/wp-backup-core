@@ -18,7 +18,7 @@ backup({
  username: "username of host",
  password: "password of host",
  port: "port for ssh login",
- name: "Name of project (used when saved to S3"),
+ name: "Name of project (used when saved to S3)",
  path: "/path/to/wordpress"
 })
 .then(() => console.log("success"))
@@ -43,7 +43,7 @@ singelBackup({
  port: "port for ssh login",
  bucketname: "Name of AWS S3 bucket",
  path: "/path/to/wordpress",
- name: "Name of project (used when saved to S3")
+ name: "Name of project (used when saved to S3)" // left empty it will fallback to same as last backup
 })
 .then(() => console.log("success"))
 .catch(console.log)
@@ -51,4 +51,4 @@ singelBackup({
 ```
 
 
-When using `singelBackup`, the name variable will override name used by `backup`, so you most likely want to use the same name as used by `backup`.
+When using `singelBackup`, the name variable will override name used by `backup`, so you most likely want to leave this empty.

@@ -41,7 +41,13 @@ const setPermission = filename => (conn) => new Promise((resolve, reject) => {
 
 const sedWpInit = ({ path, name, bucketname }) => `sed -i 's|NAME=\"examplename\"|NAME=\"${name}\"|g' ./backup.sh; sed -i 's|/path/to/wordpress|${path}|g' ./backup.sh; sed -i 's|bucketname|${bucketname}|g' ./backup.sh`
 
-const sedWp = ({ path, name, bucketname }) => `sed -i 's|NAME=".*"|NAME="${name}"|g' ./backup.sh; sed -i 's|WPROOr=".*"|WPROOT="${path}"|g' ./backup.sh; sed -i 's|BUCKETNAME=".*"|BUCKETNAME="${bucketname}"|g' ./backup.sh`
+const sedWp = ({ path, name, bucketname }) => {
+  let updateName = ""
+  if(name !== null && name !== "") {
+    updateName = `sed -i 's|NAME=".*"|NAME="${name}"|g' ./backup.sh; `
+  }
+  return `${updateName}sed -i 's|WPROOr=".*"|WPROOT="${path}"|g' ./backup.sh; sed -i 's|BUCKETNAME=".*"|BUCKETNAME="${bucketname}"|g' ./backup.sh`
+}
 
 const sedRestore = ({ path, name, filename, bucketname }) => `sed -i 's|/path/to/wp|${path}|g' ./restore.sh; sed -i 's|2019-11-21-12-16.tar.gz|${filename}|g' ./restore.sh; sed -i 's|projectname|${name}|g' ./restore.sh; sed -i 's|bucketname|${bucketname}|g' ./restore.sh`
 
