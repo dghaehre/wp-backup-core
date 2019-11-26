@@ -10,9 +10,9 @@
 # update credentials and vaiables:
 # Note: paths CANNOT end with /
 
-NAME="examplename"
-BUCKETNAME="bucketname"
-WPROOT=/path/to/wordpress
+NAME="test"
+BUCKETNAME="test"
+WPROOT="/path/to/wordpress"
 
 # Manual intervention finished
 AWSCMD=~/bin/aws
