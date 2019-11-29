@@ -27,11 +27,11 @@ DBHOST=$(grep DB_HOST $WPROOT/wp-config.php | awk -F\' '{print$4}')
 DBDUMP="$TEMP"/"$DBNAME"_$(date +"%Y-%m-%d-%H-%M").sql
 FINALDUMP="$BKPDIR"/"$NAME"_$(date +"%Y-%m-%d_%H-%M").tar.gz
 
-echo "Install dependencies.."
 cd ~/
 if [ -a $AWSCMD ]; then
   echo "Aws already installed"
 else
+  echo "Installing dependencies.."
   mkdir -p $AWSFOLDER
   mkdir -p $AWSFOLDER/bin
   curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "$AWSFOLDER/awscli-bundle.zip"

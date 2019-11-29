@@ -13,8 +13,26 @@ BUCKETNAME="bucketname"
 
 # Manual intervention finished
 AWSCMD=~/bin/aws
+AWSFOLDER=~/.awsinstaller
 RestoreFolder=~/restore
 BUCKET="s3://$BUCKETNAME/$NAME/$FILE"
+
+cd ~/
+if [ -a $AWSCMD ]; then
+  echo "Aws already installed"
+else
+  echo "Installing Aws.."
+  mkdir -p $AWSFOLDER
+  mkdir -p $AWSFOLDER/bin
+  curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "$AWSFOLDER/awscli-bundle.zip"
+  unzip $AWSFOLDER/awscli-bundle.zip -d $AWSFOLDER/bin
+  $AWSFOLDER/bin/awscli-bundle/install -b $AWSCMD
+  # Only configure if credentials dont exists
+  if [ ! -f ".aws/credentials" ]; then
+    $AWSCMD configure
+  fi
+fi
+
 
 echo "Fetching $FILE backup"
 mkdir -p $RestoreFolder

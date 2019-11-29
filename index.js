@@ -109,7 +109,7 @@ const backup = (data) => new Promise((resolve, reject) => {
   .then(setPermission("backup.sh"))
   .then(setWpInfo(sanitized))
   .then(createAwsCredentials(sanitized))
-  .then(run("backup.sh"))
+r .then(run("backup.sh"))
   .then(createCrontab)
   .then(conn => {
     conn.end()
@@ -128,6 +128,8 @@ const backup = (data) => new Promise((resolve, reject) => {
  * name
  * bucketname
  * filename
+ * key
+ * secret
  */
 const restore = (data) => new Promise((resolve, reject) => {
 
@@ -135,6 +137,7 @@ const restore = (data) => new Promise((resolve, reject) => {
   .then(downloadRestoreFile)
   .then(setPermission("restore.sh"))
   .then(setRestoreInfo(data))
+  .then(createAwsCredentials(data))
   .then(run("restore.sh"))
   .then(conn => {
     conn.end()

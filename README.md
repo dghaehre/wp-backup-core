@@ -25,6 +25,8 @@ backup({
 .catch(console.log)
 
 restore({
+ key: "your AWS key",
+ secret: "your AWS secret",
  bucketname: "Name of AWS S3 bucket",
  host: "host ip or domain",
  username: "username of host",
