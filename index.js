@@ -102,21 +102,26 @@ const sanitize = (data) => {
 }
 
 const backup = (data) => new Promise((resolve, reject) => {
-  let sanitized = sanitize(data)
+  try {
+    let sanitized = sanitize(data)
 
-  connect(sanitized)
-  .then(downloadFile)
-  .then(setPermission("backup.sh"))
-  .then(setWpInfo(sanitized))
-  .then(createAwsCredentials(sanitized))
-  .then(run("backup.sh"))
-  .then(createCrontab)
-  .then(conn => {
-    conn.end()
-    console.log("Finished")
-    resolve()
-  })
-  .catch(reject)
+    connect(sanitized)
+    .then(downloadFile)
+    .then(setPermission("backup.sh"))
+    .then(setWpInfo(sanitized))
+    .then(createAwsCredentials(sanitized))
+    .then(run("backup.sh"))
+    .then(createCrontab)
+    .then(conn => {
+      conn.end()
+      console.log("Finished")
+      resolve()
+    })
+    .catch(reject)
+
+  } catch(err) {
+    reject(err)
+  }
 })
 
 /**
@@ -132,19 +137,24 @@ const backup = (data) => new Promise((resolve, reject) => {
  * secret
  */
 const restore = (data) => new Promise((resolve, reject) => {
+  try {
 
-  connect(data)
-  .then(downloadRestoreFile)
-  .then(setPermission("restore.sh"))
-  .then(setRestoreInfo(data))
-  .then(createAwsCredentials(data))
-  .then(run("restore.sh"))
-  .then(conn => {
-    conn.end()
-    console.log("Finished")
-    resolve()
-  })
-  .catch(reject)
+    connect(data)
+    .then(downloadRestoreFile)
+    .then(setPermission("restore.sh"))
+    .then(setRestoreInfo(data))
+    .then(createAwsCredentials(data))
+    .then(run("restore.sh"))
+    .then(conn => {
+      conn.end()
+      console.log("Finished")
+      resolve()
+    })
+    .catch(reject)
+
+  } catch(err) {
+    reject(err)
+  }
 })
 
 
@@ -162,20 +172,25 @@ const restore = (data) => new Promise((resolve, reject) => {
  * secret
  */
 const singleBackup = data => new Promise((resolve, reject) => {
-  let sanitized = sanitize(data)
+  try {
 
-  connect(sanitized)
-  .then(downloadFile)
-  .then(setPermission("backup.sh"))
-  .then(setWpInfo(sanitized))
-  .then(createAwsCredentials(sanitized))
-  .then(run("backup.sh"))
-  .then(conn => {
-    conn.end()
-    console.log("Finished")
-    resolve()
-  })
-  .catch(reject)
+    let sanitized = sanitize(data)
+
+    connect(sanitized)
+    .then(downloadFile)
+    .then(setPermission("backup.sh"))
+    .then(setWpInfo(sanitized))
+    .then(createAwsCredentials(sanitized))
+    .then(run("backup.sh"))
+    .then(conn => {
+      conn.end()
+      console.log("Finished")
+      resolve()
+    })
+    .catch(reject)
+  } catch(err) {
+    reject(err)
+  }
 })
 
 exports.backup = backup

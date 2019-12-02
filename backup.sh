@@ -35,7 +35,7 @@ else
   mkdir -p $AWSFOLDER
   mkdir -p $AWSFOLDER/bin
   curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "$AWSFOLDER/awscli-bundle.zip"
-  unzip $AWSFOLDER/awscli-bundle.zip -d $AWSFOLDER/bin
+  unzip -o $AWSFOLDER/awscli-bundle.zip -d $AWSFOLDER/bin
   $AWSFOLDER/bin/awscli-bundle/install -b $AWSCMD
   # Only configure if credentials dont exists
   if [ ! -f ".aws/credentials" ]; then
