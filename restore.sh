@@ -49,6 +49,12 @@ SQLFILE=$SQLFOLDER/"$(ls $SQLFOLDER | grep .sql)"
 WPCONFIG=$(find . -name wp-config.php)
 WPFOLDER=${WPCONFIG/wp-config.php/""}
 
+cd $ORGWPFOLDER
+# Use WP config of existing wp project if it exists
+if [ -f "wp-config.php" ]; then
+  WPCONFIG=$(find . -name wp-config.php)
+fi
+
 DBUSER=$(grep DB_USER $WPCONFIG | awk -F\' '{print$4}')
 DBPASSWORD=$(grep DB_PASSWORD $WPCONFIG | awk -F\' '{print$4}')
 DBHOST=$(grep DB_HOST $WPCONFIG | awk -F\' '{print$4}')
