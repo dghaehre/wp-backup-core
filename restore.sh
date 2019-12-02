@@ -77,6 +77,9 @@ mysql -u $DBUSER -h $DBHOST -p$DBPASSWORD $DBNAME < $SQLFILE
 echo "Finished"
 
 echo "Restore files"
+cd $ORGWPFOLDER
+find . ! -name 'wp-config.php' -type f -exec rm -f {} \;
+cd $RestoreFolder
 cp $WPFOLDER* $ORGWPFOLDER -R
 echo "Finished"
 
