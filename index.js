@@ -109,7 +109,7 @@ const backup = (data) => new Promise((resolve, reject) => {
   .then(setPermission("backup.sh"))
   .then(setWpInfo(sanitized))
   .then(createAwsCredentials(sanitized))
-r .then(run("backup.sh"))
+  .then(run("backup.sh"))
   .then(createCrontab)
   .then(conn => {
     conn.end()
