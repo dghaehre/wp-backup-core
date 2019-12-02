@@ -46,7 +46,7 @@ const sedWp = ({ path, name, bucketname }) => {
   if(name !== null && name !== "") {
     updateName = `sed -i 's|NAME=".*"|NAME="${name}"|g' ./backup.sh; `
   }
-  return `${updateName}sed -i 's|WPROOr=".*"|WPROOT="${path}"|g' ./backup.sh; sed -i 's|BUCKETNAME=".*"|BUCKETNAME="${bucketname}"|g' ./backup.sh`
+  return `${updateName}sed -i 's|WPROOT=".*"|WPROOT="${path}"|g' ./backup.sh; sed -i 's|BUCKETNAME=".*"|BUCKETNAME="${bucketname}"|g' ./backup.sh`
 }
 
 const sedRestore = ({ path, name, filename, bucketname }) => `sed -i 's|/path/to/wp|${path}|g' ./restore.sh; sed -i 's|2019-11-21-12-16.tar.gz|${filename}|g' ./restore.sh; sed -i 's|projectname|${name}|g' ./restore.sh; sed -i 's|bucketname|${bucketname}|g' ./restore.sh`

@@ -10,8 +10,8 @@
 # update credentials and vaiables:
 # Note: paths CANNOT end with /
 
-NAME="test"
-BUCKETNAME="test"
+NAME="examplename"
+BUCKETNAME="bucketname"
 WPROOT="/path/to/wordpress"
 
 # Manual intervention finished
