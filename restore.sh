@@ -65,6 +65,7 @@ if [ -f "wp-config.php" ]; then
   DBHOST=$(grep DB_HOST $WPCONFIG | awk -F\' '{print$4}')
   DBNAME=$(grep DB_NAME $WPCONFIG | awk -F\' '{print$4}')
   echo "Remove backup wp-config.php"
+  cd $RestoreFolder
   cd $WPFOLDER
   rm -f ./wp-config.php
 fi
