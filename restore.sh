@@ -49,24 +49,25 @@ SQLFILE=$SQLFOLDER/"$(ls $SQLFOLDER | grep .sql)"
 WPCONFIG=$(find . -name wp-config.php)
 WPFOLDER=${WPCONFIG/wp-config.php/""}
 
-cd $ORGWPFOLDER
-# Use WP config of existing wp project if it exists
-if [ -f "wp-config.php" ]; then
-  echo "Using existing wp-config.php"
-  WPCONFIG=$(find . -name wp-config.php)
-fi
-
 DBUSER=$(grep DB_USER $WPCONFIG | awk -F\' '{print$4}')
 DBPASSWORD=$(grep DB_PASSWORD $WPCONFIG | awk -F\' '{print$4}')
 DBHOST=$(grep DB_HOST $WPCONFIG | awk -F\' '{print$4}')
 DBNAME=$(grep DB_NAME $WPCONFIG | awk -F\' '{print$4}')
 
+cd $ORGWPFOLDER
+# Use WP config of existing wp project if it exists
+
 if [ -f "wp-config.php" ]; then
+  echo "Using existing wp-config.php"
+  WPCONFIG=$(find . -name wp-config.php)
+  DBUSER=$(grep DB_USER $WPCONFIG | awk -F\' '{print$4}')
+  DBPASSWORD=$(grep DB_PASSWORD $WPCONFIG | awk -F\' '{print$4}')
+  DBHOST=$(grep DB_HOST $WPCONFIG | awk -F\' '{print$4}')
+  DBNAME=$(grep DB_NAME $WPCONFIG | awk -F\' '{print$4}')
   echo "Remove backup wp-config.php"
   cd $WPFOLDER
   rm -f ./wp-config.php
 fi
-
 
 cd $RestoreFolder
 
