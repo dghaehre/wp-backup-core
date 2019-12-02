@@ -44,7 +44,7 @@ echo "Fetched"
 cd $RestoreFolder
 tar -xzf $FILE
 
-SQLFOLDER=$(find . -name .sqlbackup)
+SQLFOLDER=$(find . -name sqlbackup)
 SQLFILE=$SQLFOLDER/"$(ls $SQLFOLDER | grep .sql)"
 WPCONFIG=$(find . -name wp-config.php)
 WPFOLDER=${WPCONFIG/wp-config.php/""}
@@ -59,6 +59,8 @@ DBUSER=$(grep DB_USER $WPCONFIG | awk -F\' '{print$4}')
 DBPASSWORD=$(grep DB_PASSWORD $WPCONFIG | awk -F\' '{print$4}')
 DBHOST=$(grep DB_HOST $WPCONFIG | awk -F\' '{print$4}')
 DBNAME=$(grep DB_NAME $WPCONFIG | awk -F\' '{print$4}')
+
+cd $RestoreFolder
 
 echo "Restore database"
 mysql -u $DBUSER -h $DBHOST -p$DBPASSWORD $DBNAME < $SQLFILE
