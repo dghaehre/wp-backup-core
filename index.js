@@ -158,10 +158,17 @@ const restore = (data) => new Promise((resolve, reject) => {
  * path
  * name
  * bucketname
+ * key
+ * secret
  */
-const singelBackup = data => new Promise((resolve, reject) => {
-  connect(data)
-  .then(setWpInfo(data, false))
+const singleBackup = data => new Promise((resolve, reject) => {
+  let sanitized = sanitize(data)
+
+  connect(sanitized)
+  .then(downloadFile)
+  .then(setPermission("backup.sh"))
+  .then(setWpInfo(sanitized))
+  .then(createAwsCredentials(sanitized))
   .then(run("backup.sh"))
   .then(conn => {
     conn.end()
@@ -173,4 +180,4 @@ const singelBackup = data => new Promise((resolve, reject) => {
 
 exports.backup = backup
 exports.restore = restore
-exports.singelBackup = singelBackup
+exports.singleBackup = singleBackup

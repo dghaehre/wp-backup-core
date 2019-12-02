@@ -39,13 +39,15 @@ restore({
 .catch(console.log)
 
 singelBackup({
+ key: "your AWS key",
+ secret: "your AWS secret",
  host: "host ip or domain",
  username: "username of host",
  password: "password of host",
  port: "port for ssh login",
  bucketname: "Name of AWS S3 bucket",
  path: "/path/to/wordpress",
- name: "Name of project (used when saved to S3)" // left empty it will fallback to same as last backup
+ name: "Name of project (used when saved to S3)"
 })
 .then(() => console.log("success"))
 .catch(console.log)
