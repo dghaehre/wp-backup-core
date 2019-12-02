@@ -52,7 +52,11 @@ WPFOLDER=${WPCONFIG/wp-config.php/""}
 cd $ORGWPFOLDER
 # Use WP config of existing wp project if it exists
 if [ -f "wp-config.php" ]; then
+  echo "Using existing wp-config.php"
   WPCONFIG=$(find . -name wp-config.php)
+  cd $WPFOLDER
+  rm -f ./wp-config.php
+  cd $ORGWPFOLDER
 fi
 
 DBUSER=$(grep DB_USER $WPCONFIG | awk -F\' '{print$4}')
